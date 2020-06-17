@@ -1,30 +1,27 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "module.h"
 
 static void print_multiply(gpointer data, gpointer user_data)
 {
-    GArray *mul = data;
+    Multiply mul = data;
 
     g_print("\tMULTIPLY: %s\n", mul->data);
 }
 
-
-
-static GArray* find_shared_factors(GPtrArray *summ)
+static Multiply find_shared_factors(Addition summ)
 {
     if (summ->len <= 1) {
         return NULL;
     }
 
-    GArray *result = g_array_new(TRUE, TRUE, sizeof(char));
+    Multiply result = g_array_new(TRUE, TRUE, sizeof(char));
 
-    GArray *first_factor = g_ptr_array_index(summ, 0);
+    Multiply first_factor = g_ptr_array_index(summ, 0);
 
     char symbol;
     for (gsize i = 0; i < first_factor->len; i++) {
-        symbol = g_array_index(first_factor, char, i);
+        symbol = g_array_index(first_factor, Token, i);
 
         // g_ptr_array_foreach(summ, print_multiply, NULL);
         // g_ptr_array_foreach(summ, print_multiply, NULL);
@@ -36,28 +33,28 @@ static GArray* find_shared_factors(GPtrArray *summ)
 }
 
 void yyerror(const char* s) {
-    fprintf(stderr, "\n\tParse error: %s\n", s);
+    g_printerr("\n\tParse error: %s\n", s);
     exit(1);
 }
 
-gchar pass_token(gchar token)
+Token pass_token(Token token)
 {
     g_print("k detected [%c].\n", token);
 
     return token;
 }
 
-GArray* new_multiply(gchar token)
+Multiply new_multiply(Token token)
 {
     g_print("term detected. [%c]\n", token);
 
-    GArray *out = g_array_new(TRUE, TRUE, sizeof(gchar));
+    Multiply out = g_array_new(TRUE, TRUE, sizeof(Token));
     g_array_append_val(out, token);
 
     return out;
 }
 
-GArray* multiply_append(GArray *multiply, gchar token)
+Multiply multiply_append(Multiply multiply, Token token)
 {
     g_print("multiply * term detected.\n");
     g_array_append_val(multiply, token);
@@ -65,17 +62,17 @@ GArray* multiply_append(GArray *multiply, gchar token)
     return multiply;
 }
 
-GPtrArray* new_addition(GArray *multiply)
+Addition new_addition(Multiply multiply)
 {
     g_print("multiply detected.\n");
 
-    GPtrArray *addition = g_ptr_array_new();
+    Addition addition = g_ptr_array_new();
     g_ptr_array_add(addition, multiply);
 
     return addition;
 }
 
-GPtrArray* addition_append(GPtrArray *addition, GArray *multiply)
+Addition addition_append(Addition addition, Multiply multiply)
 {
     g_print("expression + multiply.\n");
 
@@ -86,7 +83,7 @@ GPtrArray* addition_append(GPtrArray *addition, GArray *multiply)
     return addition;
 }
 
-void print_summ(GPtrArray *summ)
+void print_summ(Addition summ)
 {
     g_print("SUM OF:\n");
     g_ptr_array_foreach(summ, print_multiply, NULL);
