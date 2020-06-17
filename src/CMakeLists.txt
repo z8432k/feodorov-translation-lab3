@@ -13,7 +13,8 @@ target_include_directories(runner
 add_library(common
         STATIC
                 $<TARGET_OBJECTS:lexer>
-                $<TARGET_OBJECTS:parser>)
+                $<TARGET_OBJECTS:parser>
+                $<TARGET_OBJECTS:module>)
 target_include_directories(common
         INTERFACE
                 parser

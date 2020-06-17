@@ -21,11 +21,17 @@ target_include_directories(lexer
         PRIVATE
         ${GLIB2_INCLUDE_DIRS})
 
+add_library(module
+        OBJECT
+        module.c)
+target_include_directories(module
+        PUBLIC
+        ${GLIB2_INCLUDE_DIRS})
+
 add_library(parser
         OBJECT
         ${BISON_Parser_OUTPUT_SOURCE})
-target_include_directories(parser
+target_link_libraries(parser
         PRIVATE
-        ${GLIB2_INCLUDE_DIRS})
-
+        module)
 

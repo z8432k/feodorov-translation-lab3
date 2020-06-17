@@ -21,35 +21,35 @@ ADD             [+]
 
 {K_CHAR} {
                 printf("\tFound 'k'\n");
-                yylval.image = strdup(yytext);
+                yylval.image = yytext[0];
 
                 return K_CHAR;
 }
 
 {M_CHAR} {
                 printf("\tFound 'm'\n");
-                yylval.image = strdup(yytext);
+                yylval.image = yytext[0];
 
                 return M_CHAR;
 }
 
 {N_CHAR} {
                 printf("\tFound 'n'\n");
-                yylval.image = strdup(yytext);
+                yylval.image = yytext[0];
 
                 return N_CHAR;
 }
 
 {MUL} {
                 printf("\tFound '*'\n");
-                yylval.image = strdup(yytext);
+                yylval.image = yytext[0];
 
                 return MUL;
 }
 
 {ADD} {
                 printf("\tFound '+'\n");
-                yylval.image = strdup(yytext);
+                yylval.image = yytext[0];
 
                 return ADD;
 }
