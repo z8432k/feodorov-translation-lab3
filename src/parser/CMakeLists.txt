@@ -17,9 +17,15 @@ add_library(lexer
         OBJECT
         ${FLEX_Lexer_OUTPUTS})
 target_compile_options(lexer PRIVATE "-Wno-sign-compare" "-Wno-unused-function")
+target_include_directories(lexer
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(parser
         OBJECT
         ${BISON_Parser_OUTPUT_SOURCE})
+target_include_directories(parser
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
 
 

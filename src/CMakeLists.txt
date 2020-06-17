@@ -15,18 +15,18 @@ add_library(common
                 $<TARGET_OBJECTS:lexer>
                 $<TARGET_OBJECTS:parser>)
 target_include_directories(common
-        PUBLIC
-                parser)
+        INTERFACE
+                parser
+                ${GLIB2_INCLUDE_DIRS})
+target_link_libraries(common
+        INTERFACE
+                ${GLIB2_LDFLAGS})
 
 add_executable(programm
         programm.c)
-target_include_directories(programm
-        PRIVATE
-                ${GLIB2_INCLUDE_DIRS})
 target_link_libraries(programm
         PRIVATE
-                runner
-                ${GLIB2_LDFLAGS})
+                runner)
 target_compile_options(programm PRIVATE "-Wno-unused-parameter")
 
 

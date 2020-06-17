@@ -1,3 +1,5 @@
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
+
 list(APPEND _tests
         parser_test0
         parser_test1
