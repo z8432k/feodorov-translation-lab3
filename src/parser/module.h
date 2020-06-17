@@ -1,11 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <glib.h>
 
-GArray* new_multiply(gchar token);
-GArray* multiply_append(GArray *multiply, gchar token);
+typedef GArray* Multiply;
+typedef GPtrArray* Addition;
+typedef gchar Token;
 
-GPtrArray* new_addition(GArray *multiply);
-GPtrArray* addition_append(GPtrArray *addition, GArray *multiply);
+Multiply new_multiply(gchar token);
+Multiply multiply_append(Multiply multiply, Token token);
 
-void print_summ(GPtrArray *summ);
+Token pass_token(Token token);
+Addition new_addition(Multiply multiply);
+Addition addition_append(Addition addition, Multiply multiply);
+
+void print_summ(Addition summ);

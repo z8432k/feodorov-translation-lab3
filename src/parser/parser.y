@@ -4,8 +4,6 @@ int yylex (void);
 
 void yyerror(const char* s);
 
-#include <glib.h>
-
 %}
 
 %code requires
@@ -14,9 +12,9 @@ void yyerror(const char* s);
 }
 
 %union {
-  char image;
-  GArray* mul;
-  GPtrArray* summ;
+  Token image;
+  Multiply mul;
+  Addition summ;
 }
 %token <image> WS K_CHAR M_CHAR N_CHAR MUL ADD
 
@@ -29,7 +27,7 @@ void yyerror(const char* s);
 %%
 
 begin:
-  addition                  { g_print("Axioma detected.\n"); }
+  addition                  { /*g_print("Axioma detected.\n");*/ }
 ;
 
 addition:
@@ -43,9 +41,9 @@ multiply:
 ;
 
 term:
-  K_CHAR                    { g_print("k detected [%c].\n", $1); $$ = $1; }
-  | M_CHAR                  { g_print("m detected [%c].\n", $1); $$ = $1; }
-  | N_CHAR                  { g_print("n detected [%c].\n", $1); $$ = $1; }
+  K_CHAR                    { $$ = pass_token($1); }
+  | M_CHAR                  { $$ = pass_token($1); }
+  | N_CHAR                  { $$ = pass_token($1); }
 ;
 
 %%

@@ -1,5 +1,7 @@
-#include "parser.h"
-#include <glib.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "module.h"
 
 static void print_multiply(gpointer data, gpointer user_data)
 {
@@ -36,6 +38,13 @@ static GArray* find_shared_factors(GPtrArray *summ)
 void yyerror(const char* s) {
     fprintf(stderr, "\n\tParse error: %s\n", s);
     exit(1);
+}
+
+gchar pass_token(gchar token)
+{
+    g_print("k detected [%c].\n", token);
+
+    return token;
 }
 
 GArray* new_multiply(gchar token)
