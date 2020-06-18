@@ -2,6 +2,21 @@
 
 #include "module.h"
 
+#define _new_multiply() (g_array_new(TRUE, TRUE, sizeof(Token)))
+#define _new_addition() (g_ptr_array_new())
+#define stringify_multiply(multiply) (g_string_new(multiply->data))
+
+typedef struct {
+    gsize step;
+    GString* string;
+} StringifyContext;
+
+typedef struct {
+    gsize shots;
+    Token token;
+    gboolean done;
+} SharedFactorContext;
+
 static void print_multiply(gpointer data, gpointer user_data)
 {
     Multiply mul = data;
@@ -9,27 +24,121 @@ static void print_multiply(gpointer data, gpointer user_data)
     g_print("\tMULTIPLY: %s\n", mul->data);
 }
 
-static Multiply find_shared_factors(Addition summ)
+static void check_target_token(gpointer data, gpointer user_data) {
+    Multiply multiply = data;
+    SharedFactorContext *context = user_data;
+
+    Token current_token;
+    for (gsize i = 0; i < multiply->len; i++) {
+        current_token = g_array_index(multiply, Token, i);
+
+        if (current_token == context->token) {
+            context->shots++;
+            break;
+        }
+    }
+}
+
+static void remove_target_token(gpointer data, gpointer user_data)
 {
-    if (summ->len <= 1) {
-        return NULL;
+    Multiply multiply = data;
+    SharedFactorContext *context = user_data;
+
+    Token current_token;
+    for (gsize i = 0; i < multiply->len; i++) {
+        current_token = g_array_index(multiply, Token, i);
+
+        if (current_token == context->token) {
+            g_array_remove_index(multiply, i);
+            break;
+        }
     }
 
-    Multiply result = g_array_new(TRUE, TRUE, sizeof(char));
+    if (multiply->len == 0) {
+        g_array_append_val(multiply, "1");
+        context->done = TRUE;
+    }
+}
+
+static Multiply shared_factor(Addition summ)
+{
+    //if (summ->len <= 1) {
+    //    return NULL;
+    //}
+
+    Multiply result = _new_multiply();
 
     Multiply first_factor = g_ptr_array_index(summ, 0);
 
-    char symbol;
-    for (gsize i = 0; i < first_factor->len; i++) {
-        symbol = g_array_index(first_factor, Token, i);
+    SharedFactorContext context = {
+            0,
+            0,
+            FALSE
+    };
+    for (gsize i = 0; i < first_factor->len;) {
+        context.token = g_array_index(first_factor, Token, i);
 
-        // g_ptr_array_foreach(summ, print_multiply, NULL);
-        // g_ptr_array_foreach(summ, print_multiply, NULL);
-        g_print("FIND SHARED [%c]:\n", symbol);
+        g_print("\t\tFINDING SHARED FACTOR [%c]:\n", context.token);
+
+        context.shots = 0;
+
+        g_ptr_array_foreach(summ, check_target_token, &context);
+
+        if (context.shots == summ->len) {
+            g_array_append_val(result, context.token);
+            g_ptr_array_foreach(summ, remove_target_token, &context);
+        }
+        else {
+            i++;
+        }
+
+        if (context.done) {
+            break;
+        }
     }
 
+    if (result->len == 0) {
+        g_array_append_val(result, "1");
+    }
 
     return result;
+}
+
+static void print_summ(Addition summ)
+{
+    g_print("\n");
+
+    if (summ->len > 1) {
+        g_print("\nSUM OF:\n");
+    }
+
+    g_ptr_array_foreach(summ, print_multiply, NULL);
+}
+
+static void stringify_combine_additions(gpointer data, gpointer user_data)
+{
+    Multiply multiply = data;
+    StringifyContext *context = user_data;
+
+    if (context->step > 0) {
+        g_string_append(context->string, "+");
+    }
+
+    g_string_append(context->string, stringify_multiply(multiply)->str);
+
+    context->step++;
+}
+
+static GString* stringify_addition(Addition summ)
+{
+    StringifyContext context = {
+            0,
+            g_string_new("")
+    };
+
+    g_ptr_array_foreach(summ, stringify_combine_additions, &context);
+
+    return context.string;
 }
 
 void yyerror(const char* s) {
@@ -48,10 +157,10 @@ Multiply new_multiply(Token token)
 {
     g_print("term detected. [%c]\n", token);
 
-    Multiply out = g_array_new(TRUE, TRUE, sizeof(Token));
-    g_array_append_val(out, token);
+    Multiply multiply = _new_multiply();
+    g_array_append_val(multiply, token);
 
-    return out;
+    return multiply;
 }
 
 Multiply multiply_append(Multiply multiply, Token token)
@@ -66,7 +175,7 @@ Addition new_addition(Multiply multiply)
 {
     g_print("multiply detected.\n");
 
-    Addition addition = g_ptr_array_new();
+    Addition addition = _new_addition();
     g_ptr_array_add(addition, multiply);
 
     return addition;
@@ -78,15 +187,23 @@ Addition addition_append(Addition addition, Multiply multiply)
 
     g_ptr_array_add(addition, multiply);
 
-    print_summ(addition);
-
     return addition;
 }
 
-void print_summ(Addition summ)
+void translate(Addition summ)
 {
-    g_print("SUM OF:\n");
-    g_ptr_array_foreach(summ, print_multiply, NULL);
+    g_print("Axioma deteted.\n");
 
-    find_shared_factors(summ);
+    print_summ(summ);
+
+    Multiply factor = shared_factor(summ);
+
+    GString *factor_str = stringify_multiply(factor);
+    GString *summ_str = stringify_addition(summ);
+
+    g_print("\nRESULT: %s(%s)", factor_str->str, summ_str->str);
+
+    g_string_free(factor_str, TRUE);
+    g_string_free(summ_str, TRUE);
 }
+

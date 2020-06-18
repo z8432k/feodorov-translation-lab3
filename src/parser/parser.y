@@ -27,7 +27,7 @@ void yyerror(const char* s);
 %%
 
 begin:
-  addition                  { /*g_print("Axioma detected.\n");*/ }
+  addition                  { translate($1); }
 ;
 
 addition:
@@ -48,4 +48,4 @@ term:
 
 %%
 
-// Felix, qui potuit rerum cognoscere causas
+// Felix, qui potuit rerum cognoscere causas (Virgil)
