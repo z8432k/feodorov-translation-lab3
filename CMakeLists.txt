@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
-project(feodorov-translation-lab2 LANGUAGES C)
+project(feodorov-translation-lab3 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS ON)
@@ -22,11 +22,10 @@ find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 
-# include(GNUInstallDirs)
 
 add_subdirectory(src)
 
 
-enable_testing()
+# enable_testing()
 
-add_subdirectory(tests)
+# add_subdirectory(tests)

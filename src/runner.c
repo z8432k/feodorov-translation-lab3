@@ -4,6 +4,6 @@
 
 void runner(gchar *str, gchar **result) {
     yy_scan_string(str);
-    yyparse(result);
+    parse(result);
 }
 

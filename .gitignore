@@ -15,7 +15,5 @@ tmp
 build
 cmake-build-*/
 
-src/parser/*.c
-src/parser/*.h
-src/parser/*.output
+src/parser/lexer.*
 !src/parser/actions*
