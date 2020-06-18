@@ -2,6 +2,11 @@
 
 int main(void)
 {
-    char *result;
+    char *result = NULL;
+
     runner("n+m", &result);
+
+    if (result) {
+        g_free(result);
+    }
 }

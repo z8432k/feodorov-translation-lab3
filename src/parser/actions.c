@@ -137,7 +137,7 @@ static inline GString* stringify_addition(Addition summ)
     return context.string;
 }
 
-void yyerror(const char* s) {
+void yyerror(gchar *result, const char* s) {
     g_printerr("\n\tParse error: %s\n", s);
     exit(1);
 }
