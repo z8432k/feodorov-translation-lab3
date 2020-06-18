@@ -1,12 +1,6 @@
-#include "runner.h"
+#include "check.h"
 
 int main(void)
 {
-    char *result = NULL;
-
-    runner("n*m+k*m+m+m*m+k*k+m+n", &result);
-
-    if (result) {
-        g_free(result);
-    }
+    check("n*m*k+k*m+m+m*m+k*k*m+m+n*m", "m(nk+k+1+m+kk+1+n)");
 }

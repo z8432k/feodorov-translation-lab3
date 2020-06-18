@@ -1,5 +1,16 @@
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
 
+add_library(check
+        OBJECT
+        check.c)
+target_include_directories(check
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
+target_link_libraries(check
+        PUBLIC
+        runner
+        ${GLIB2_LDFLAGS})
+
 list(APPEND _tests
         parser_test0
         parser_test1
@@ -14,14 +25,10 @@ list(APPEND _tests
 
 foreach(_test IN LISTS _tests)
                 add_executable(${_test} ${_test}.c)
-
-                target_include_directories(${_test}
-                                PRIVATE
-                                                ${GLIB2_INCLUDE_DIRS})
-
                 target_link_libraries(${_test}
-                                runner
-                                ${GLIB2_LDFLAGS})
+                        PRIVATE
+                        check
+                        runner)
 endforeach()
 
 add_test(NAME test_'n'

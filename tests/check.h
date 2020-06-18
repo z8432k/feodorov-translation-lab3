@@ -1,0 +1,6 @@
+#ifndef FEODOROV_TRANSLATION_LAB2_CHECK_H
+#define FEODOROV_TRANSLATION_LAB2_CHECK_H
+
+void check(char *actual, char *expected);
+
+#endif //FEODOROV_TRANSLATION_LAB2_CHECK_H
