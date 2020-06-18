@@ -4,7 +4,6 @@
 
 #define _new_multiply() (g_array_new(TRUE, TRUE, sizeof(Token)))
 #define _new_addition() (g_ptr_array_new())
-#define stringify_multiply(multiply) (g_string_new(multiply->data))
 
 typedef struct {
     gsize step;
@@ -120,7 +119,8 @@ static void stringify_combine_additions(gpointer data, gpointer user_data)
         g_string_append(context->string, "+");
     }
 
-    g_string_append(context->string, stringify_multiply(multiply)->str);
+    g_string_append(context->string, multiply->data);
+    g_array_free(multiply, TRUE);
 
     context->step++;
 }
@@ -133,6 +133,8 @@ static GString* stringify_addition(Addition summ)
     };
 
     g_ptr_array_foreach(summ, stringify_combine_additions, &context);
+
+    g_ptr_array_free(summ, TRUE);
 
     return context.string;
 }
@@ -194,12 +196,11 @@ void translate(Addition summ)
 
     Multiply factor = shared_factor(summ);
 
-    GString *factor_str = stringify_multiply(factor);
     GString *summ_str = stringify_addition(summ);
 
-    g_print("\nRESULT: %s(%s)", factor_str->str, summ_str->str);
+    g_print("\nRESULT: %s(%s)", factor->data, summ_str->str);
 
-    g_string_free(factor_str, TRUE);
     g_string_free(summ_str, TRUE);
+    g_array_free(factor, TRUE);
 }
 
