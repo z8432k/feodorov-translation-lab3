@@ -16,11 +16,9 @@ typedef struct {
     gboolean done;
 } SharedFactorContext;
 
-static void print_multiply(gpointer data, gpointer user_data)
+static inline void print_multiply(gpointer data, gpointer user_data)
 {
-    Multiply mul = data;
-
-    g_print("\tMULTIPLY: %s\n", mul->data);
+    g_print("\tMULTIPLY: %s\n", ((Multiply) data)->data);
 }
 
 static void check_target_token(gpointer data, gpointer user_data) {
@@ -99,7 +97,7 @@ static Multiply shared_factor(Addition summ)
     return result;
 }
 
-static void print_summ(Addition summ)
+static inline void print_summ(Addition summ)
 {
     g_print("\n");
 
@@ -125,7 +123,7 @@ static void stringify_combine_additions(gpointer data, gpointer user_data)
     context->step++;
 }
 
-static GString* stringify_addition(Addition summ)
+static inline GString* stringify_addition(Addition summ)
 {
     StringifyContext context = {
             0,

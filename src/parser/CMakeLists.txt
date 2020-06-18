@@ -21,18 +21,18 @@ target_include_directories(lexer
         PRIVATE
         ${GLIB2_INCLUDE_DIRS})
 
-add_library(module
+add_library(actions
         OBJECT
         actions.c)
-target_include_directories(module
+target_include_directories(actions
         PUBLIC
         ${GLIB2_INCLUDE_DIRS})
-target_compile_options(module PRIVATE "-Wno-unused-parameter")
+target_compile_options(actions PRIVATE "-Wno-unused-parameter")
 
 add_library(parser
         OBJECT
         ${BISON_Parser_OUTPUT_SOURCE})
 target_link_libraries(parser
         PRIVATE
-        module)
+        actions)
 

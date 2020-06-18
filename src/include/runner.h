@@ -1,3 +1,3 @@
 #include <glib.h>
 
-void runner(char *str, gchar **result);
+void runner(gchar *str, gchar **result);

@@ -14,7 +14,7 @@ add_library(common
         STATIC
                 $<TARGET_OBJECTS:lexer>
                 $<TARGET_OBJECTS:parser>
-                $<TARGET_OBJECTS:module>)
+                $<TARGET_OBJECTS:actions>)
 target_include_directories(common
         INTERFACE
                 parser
