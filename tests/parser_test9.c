@@ -2,5 +2,6 @@
 
 int main(void)
 {
-    runner("n**");
+    char *result;
+    runner("n**", &result);
 }

@@ -2,5 +2,6 @@
 
 int main(void)
 {
-    runner("n++m");
+    char *result;
+    runner("n++m", &result);
 }

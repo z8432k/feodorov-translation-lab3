@@ -2,5 +2,6 @@
 
 int main(void)
 {
-    runner("n*m+k+m");
+    char *result;
+    runner("n*m+k+m", &result);
 }

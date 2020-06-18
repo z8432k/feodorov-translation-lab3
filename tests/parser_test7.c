@@ -2,5 +2,6 @@
 
 int main(void)
 {
-    runner("n*mm");
+    char *result;
+    runner("n*mm", &result);
 }
