@@ -8,7 +8,7 @@ void yyerror(const char* s);
 
 %code requires
 {
-#include "module.h"
+#include "actions.h"
 }
 
 %union {

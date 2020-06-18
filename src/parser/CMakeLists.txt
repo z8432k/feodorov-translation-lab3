@@ -23,7 +23,7 @@ target_include_directories(lexer
 
 add_library(module
         OBJECT
-        module.c)
+        actions.c)
 target_include_directories(module
         PUBLIC
         ${GLIB2_INCLUDE_DIRS})

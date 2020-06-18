@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "module.h"
+#include "actions.h"
 
 #define _new_multiply() (g_array_new(TRUE, TRUE, sizeof(Token)))
 #define _new_addition() (g_ptr_array_new())
