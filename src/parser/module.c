@@ -62,10 +62,6 @@ static void remove_target_token(gpointer data, gpointer user_data)
 
 static Multiply shared_factor(Addition summ)
 {
-    //if (summ->len <= 1) {
-    //    return NULL;
-    //}
-
     Multiply result = _new_multiply();
 
     Multiply first_factor = g_ptr_array_index(summ, 0);

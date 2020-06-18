@@ -27,6 +27,7 @@ add_library(module
 target_include_directories(module
         PUBLIC
         ${GLIB2_INCLUDE_DIRS})
+target_compile_options(module PRIVATE "-Wno-unused-parameter")
 
 add_library(parser
         OBJECT
