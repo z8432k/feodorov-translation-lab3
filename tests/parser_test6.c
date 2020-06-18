@@ -2,5 +2,5 @@
 
 int main(void)
 {
-    check("n*m*k+k*m+m+m*m+k*k*m+m+n*m", "m(nk+k+1+m+kk+1+n)");
+    check("n*m*k+k*m+m+m*m+k*k*m+m+n*m", "m(n+1+kk+m+1+k+kn)");
 }

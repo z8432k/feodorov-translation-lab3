@@ -26,6 +26,6 @@ pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 add_subdirectory(src)
 
 
-# enable_testing()
+enable_testing()
 
-# add_subdirectory(tests)
+add_subdirectory(tests)

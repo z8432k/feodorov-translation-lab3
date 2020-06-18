@@ -2,5 +2,5 @@
 
 int main(void)
 {
-    check("n+m*k", "1(n+mk)");
+    check("n+m*k", "1(km+n)");
 }

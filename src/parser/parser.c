@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include <glib.h>
 
 #include "parser.h"
@@ -150,7 +150,8 @@ gint parse(gchar **translate_result)
         return 0;
     }
     else {
-        printf("FAIL.\n");
+        g_print("FAIL.\n");
+        exit(1);
         return 1;
     }
 }
