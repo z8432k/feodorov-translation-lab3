@@ -34,7 +34,7 @@ endforeach()
 add_test(NAME test_'n'
         COMMAND $<TARGET_FILE:parser_test0>)
 
-add_test(NAME test_'n+m'
+add_test(NAME test_'n*m'
         COMMAND $<TARGET_FILE:parser_test1>)
 
 add_test(NAME test_'n+m*k'
@@ -43,13 +43,13 @@ add_test(NAME test_'n+m*k'
 add_test(NAME test_'n*m+k+m'
         COMMAND $<TARGET_FILE:parser_test3>)
 
-add_test(NAME test_'n*m+n*k'
+add_test(NAME test_'n*m+m*n'
         COMMAND $<TARGET_FILE:parser_test4>)
 
-add_test(NAME test_'n*m+k*m+m*m*m+k'
+add_test(NAME test_'n*m+k*m+m*m*m+k*m'
         COMMAND $<TARGET_FILE:parser_test5>)
 
-add_test(NAME test_'n*m+k*m+m+m*m+k*k+m+n'
+add_test(NAME test_'n*m*k+k*m+m+m*m+k*k*m+m+n*m'
         COMMAND $<TARGET_FILE:parser_test6>)
 
 add_test(NAME test_fail_'n*mm'
