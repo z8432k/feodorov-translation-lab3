@@ -1,107 +1,127 @@
 #include <stdio.h>
-#include "parser.h"
+#include <glib.h>
 
-char* image;
+#include "parser.h"
+#include "actions.h"
+
+gchar* image;
 
 LexToken token;
 
-static int F()
+static gboolean F(Token *tok)
 {
     switch (token) {
         case N_CHAR:
         case M_CHAR:
         case K_CHAR:
+            *tok = image[0];
             token = yylex();
-            return 1;
+            return TRUE;
         default:
-            return 0;
+            return FALSE;
     }
 }
 
-static int H()
+static gboolean H(Multiply mul)
 {
+    Token tok;
+
     switch (token) {
         case MUL:
             token = yylex();
-            if (!F()) {
-                return 0;
+            if (!F(&tok)) {
+                return FALSE;
             }
-            if (!H()) {
-                return 0;
+            if (!H(mul)) {
+                return FALSE;
             }
             break;
         case ADD:
         case EOL:
-            return 1;
+            return TRUE;
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    multiply_append(mul, tok);
+
+    return TRUE;
 }
 
-static int T()
+static gboolean T(Multiply mul)
 {
+    Token tok;
+
     switch (token) {
         case N_CHAR:
         case M_CHAR:
         case K_CHAR:
-            if (!F()) {
-                return 0;
+            if (!F(&tok)) {
+                return FALSE;
             }
-            if (!H()) {
-                return 0;
+            if (!H(mul)) {
+                return FALSE;
             }
             break;
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    multiply_append(mul, tok);
+
+    return TRUE;
 }
 
-static int G()
+static gboolean G(Addition summ)
 {
+    Multiply mul = new_multiply();
+
     switch (token) {
         case ADD:
             token = yylex();
-            if (!T()) {
-                return 0;
+            if (!T(mul)) {
+                return FALSE;
             }
-            if (!G()) {
-                return 0;
+            if (!G(summ)) {
+                return FALSE;
             }
             break;
         case EOL:
-            return 1;
+            return TRUE;
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    addition_append(summ, mul);
+
+    return TRUE;
 }
 
-static int E()
+static gboolean E(Addition summ)
 {
+    Multiply mul = new_multiply();
+
     switch (token) {
         case N_CHAR:
         case M_CHAR:
         case K_CHAR:
-            if (!T()) {
-                return 0;
+            if (!T(mul)) {
+                return FALSE;
             }
-            if (!G()) {
-                return 0;
+            if (!G(summ)) {
+                return FALSE;
             }
             break;
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    addition_append(summ, mul);
+
+    return TRUE;
 }
 
-static int S()
+static gboolean S(Addition summ)
 {
     token = yylex();
 
@@ -109,23 +129,28 @@ static int S()
         case N_CHAR:
         case M_CHAR:
         case K_CHAR:
-            if (!E()) {
-                return 0;
+            if (!E(summ)) {
+                return FALSE;
             }
             break;
         default:
-            return 0;
+            return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
 
-int parse(char **translate_result)
+gint parse(gchar **translate_result)
 {
-    if (S()) {
-        return printf("OK\n");
+    Addition summ = new_addition();
+
+    if (S(summ)) {
+        g_print("\n\t Syntax OK.\n");
+        *translate_result = translate(summ);
+        return 0;
     }
     else {
-        return printf("FAIL.\n");
+        printf("FAIL.\n");
+        return 1;
     }
 }

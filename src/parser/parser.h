@@ -2,4 +2,4 @@
 
 extern int yylex(void);
 
-int parse (char **translate_result);
+gint parse (gchar **translate_result);

@@ -2,9 +2,6 @@
 
 #include "actions.h"
 
-#define _new_multiply() (g_array_new(TRUE, TRUE, sizeof(Token)))
-#define _new_addition() (g_ptr_array_new())
-
 typedef struct {
     gsize step;
     GString* string;
@@ -59,7 +56,7 @@ static void remove_target_token(gpointer data, gpointer user_data)
 
 static Multiply shared_factor(Addition summ)
 {
-    Multiply result = _new_multiply();
+    Multiply result = new_multiply();
 
     Multiply first_factor = g_ptr_array_index(summ, 0);
 
@@ -137,50 +134,15 @@ static inline GString* stringify_addition(Addition summ)
     return context.string;
 }
 
-void yyerror(gchar *result, const char* s) {
-    g_printerr("\n\tParse error: %s\n", s);
-    exit(1);
-}
-
-Token pass_token(Token token)
-{
-    g_print("k detected [%c].\n", token);
-
-    return token;
-}
-
-Multiply new_multiply(Token token)
-{
-    g_print("term detected. [%c]\n", token);
-
-    Multiply multiply = _new_multiply();
-    g_array_append_val(multiply, token);
-
-    return multiply;
-}
-
 Multiply multiply_append(Multiply multiply, Token token)
 {
-    g_print("multiply * term detected.\n");
     g_array_append_val(multiply, token);
 
     return multiply;
-}
-
-Addition new_addition(Multiply multiply)
-{
-    g_print("multiply detected.\n");
-
-    Addition addition = _new_addition();
-    g_ptr_array_add(addition, multiply);
-
-    return addition;
 }
 
 Addition addition_append(Addition addition, Multiply multiply)
 {
-    g_print("expression + multiply.\n");
-
     g_ptr_array_add(addition, multiply);
 
     return addition;
@@ -188,9 +150,6 @@ Addition addition_append(Addition addition, Multiply multiply)
 
 gchar* translate(Addition summ)
 {
-    g_print("Axioma deteted.\n");
-    g_print("\n\t Syntax OK.\n");
-
     print_summ(summ);
 
     Multiply factor = shared_factor(summ);
