@@ -188,9 +188,10 @@ Addition addition_append(Addition addition, Multiply multiply)
     return addition;
 }
 
-void translate(Addition summ)
+gchar* translate(Addition summ)
 {
     g_print("Axioma deteted.\n");
+    g_print("\n\t Syntax OK.\n");
 
     print_summ(summ);
 
@@ -198,9 +199,16 @@ void translate(Addition summ)
 
     GString *summ_str = stringify_addition(summ);
 
-    g_print("\nRESULT: %s(%s)", factor->data, summ_str->str);
+    GString* tmp = g_string_new("");
 
+    g_string_printf(tmp, "%s(%s)", factor->data, summ_str->str);
+
+    gchar *result = tmp->str;
+
+    g_string_free(tmp, FALSE);
     g_string_free(summ_str, TRUE);
     g_array_free(factor, TRUE);
+
+    return result;
 }
 

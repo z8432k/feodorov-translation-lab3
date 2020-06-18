@@ -3,9 +3,8 @@
 #include "parser.h"
 #include "lexer.h"
 
-void runner(char *str) {
+void runner(char *str, gchar **result) {
     yy_scan_string(str);
-    yyparse();
-    printf("\n\t Syntax OK.\n");
+    yyparse(result);
 }
 

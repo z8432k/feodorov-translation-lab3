@@ -11,4 +11,4 @@ Token pass_token(Token token);
 Addition new_addition(Multiply multiply);
 Addition addition_append(Addition addition, Multiply multiply);
 
-void translate(Addition summ);
+gchar* translate(Addition summ);

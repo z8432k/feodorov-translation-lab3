@@ -2,7 +2,7 @@
 
 int yylex (void);
 
-void yyerror(const char* s);
+void yyerror(char **translate_result, const char* s);
 
 %}
 
@@ -24,14 +24,16 @@ void yyerror(const char* s);
 %type<mul> multiply
 %type<summ> addition
 
+%parse-param {char **translate_result}
+
 %%
 
 begin:
-  addition                  { translate($1); }
+  addition                  { *translate_result = translate($1); }
 ;
 
 addition:
-  addition ADD multiply     { addition_append($1, $3); }
+  addition ADD multiply     { $$ = addition_append($1, $3); }
   | multiply                { $$ = new_addition($1); }
 ;
 
